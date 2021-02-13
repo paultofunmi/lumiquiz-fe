@@ -32,9 +32,3 @@ on the subsequent attempt. Otherwise, you will face username/email already taken
 ```
 npm run test:e2e
 ```
-
-### Lints and fixes files
-
-```
-npm run lint
-```

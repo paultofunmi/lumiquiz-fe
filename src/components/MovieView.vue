@@ -43,7 +43,7 @@ guess = '';
     }
     
     get termId() {
-        return JSON.parse(this.$store.getters.term)
+        return this.$store.getters.term
     }
 
     submitScore(): void {
