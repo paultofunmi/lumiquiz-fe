@@ -34,9 +34,6 @@ export default class NavbarComponent extends Vue {
        .then(() => {
           this.$router.push('/')
         })
-       .catch(err => { 
-           //do nothing 
-        })
     }
 }
 </script>

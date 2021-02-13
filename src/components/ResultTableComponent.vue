@@ -1,6 +1,6 @@
 <template>
   <section class="mb-5">
-    <table class="table table-bordered">        
+    <table class="table table-bordered" v-if="data.length > 0">        
         <thead>
             <tr>
                 <th v-for=" (col, index) in columns" v-on:click="sortTable(col)" :key="index">{{ format(col) }}</th>
@@ -12,6 +12,9 @@
             </tr>
         </tbody> 
     </table>
+    <div v-else>
+        <p class="mt-4 font-weight-bold"> No data exists </p>
+    </div>
   </section>
 </template>
 

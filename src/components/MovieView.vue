@@ -41,7 +41,11 @@ guess = '';
     get moviesTermData() {
         return JSON.parse(this.$store.getters.movies)
     }
-      
+    
+    get termId() {
+        return JSON.parse(this.$store.getters.term)
+    }
+
     submitScore(): void {
         
         if(this.guess.length == 0) return;
@@ -61,14 +65,15 @@ guess = '';
         }
         else {
             this.awaitingResult = true;
-            const actionPayload = {
+            const payload = {
                 submissions: this.scores,
+                'term_id': this.termId
             }
-            this.$store.dispatch('scoreQuiz', actionPayload)
-            .then((response) => {
+
+            this.$store.dispatch('scoreQuiz', payload)
+            .then(() => {
                 this.awaitingResult = false;    
-            }).catch(err => {
-                console.log(err);
+            }).catch(() => {
                this.awaitingResult = false;     
             })
         }

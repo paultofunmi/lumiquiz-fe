@@ -9,8 +9,8 @@
                         <loading-component width="35"></loading-component>
                     </div>
 
-                    <div class="alert alert-warning" role="alert" v-if="invalidInput || authError.length > 0">
-                        <ul v-if="invalidInput">
+                    <div class="alert alert-warning" role="alert" v-if="hasErrors || authError.length > 0">
+                        <ul v-if="hasErrors">
                             <li v-for="(error, index) in errors" :key="index"> {{ error }} </li>
                         </ul>
 
@@ -60,7 +60,7 @@ export default class Login extends Vue {
   email = '';
   password = '';
   errors: string[] = [];
-  invalidInput = false;
+  hasErrors = false;
 
   get authError(): [] {
       return this.$store.getters.authError
@@ -69,18 +69,19 @@ export default class Login extends Vue {
   loginUser(): void {
     
     this.errors = [];
+    this.hasErrors = false;
 
     if(this.email == ''){
         this.errors.push("Email field cannot be empty");
-        this.invalidInput = true;
+        this.hasErrors = true;
     }  
 
     if(this.password == '' || this.password.length < 5){ 
         this.errors.push("Ensure that Password field is not empty and is at least 5 characters");
-        this.invalidInput = true;
+        this.hasErrors = true;
     }
 
-    if(this.invalidInput) return;
+    if(this.hasErrors) return;
 
     this.isLoggingIn = true        
     const data = {
@@ -89,11 +90,11 @@ export default class Login extends Vue {
     }
 
     this.$store.dispatch('login', data)
-    .then((response) => {        
+    .then(() => {        
         this.isAlertShowing = true;
         this.errors = [];
         setTimeout(() => this.redirect(), 400)
-    }).catch(error => {
+    }).catch(() => {
         this.isLoggingIn = false
     })
   }

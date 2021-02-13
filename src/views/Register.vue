@@ -122,7 +122,7 @@ export default class Register extends Vue {
         this.isAlertShowing = true;
         this.$router.push({name: 'Guessing'})  
     })
-    .catch(error => this.isLoggingIn = false )
+    .catch(() => this.isLoggingIn = false )
 
   }
 }

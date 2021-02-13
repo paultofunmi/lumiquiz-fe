@@ -139,12 +139,12 @@ export default new Vuex.Store({
         resolve('')
       })
     },
-    scoreQuiz({ commit }, scores) {
+    scoreQuiz({ commit }, data) {
       
-      const data = {
-        ...scores,
-        'term_id': this.state.term
-      }
+      // const data = {
+      //   ...scores,
+      //   'term_id': this.state.term
+      // }
       
       return new Promise((resolve, reject) => {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.state.token
@@ -188,6 +188,7 @@ export default new Vuex.Store({
     score: state => state.score,
     total: state => state.total,
     percentage: state => state.percentage,
-    authError: state => state.authError
+    authError: state => state.authError,
+    term: state => state.term
   }
 })

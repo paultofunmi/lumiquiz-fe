@@ -52,9 +52,6 @@ export default class Results extends Vue {
                 this.scores.push(d.score)
             });
         })
-        .catch(err =>{
-            //  console.log(err)
-        })
     }
 
 }

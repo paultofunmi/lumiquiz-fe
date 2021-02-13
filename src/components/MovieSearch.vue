@@ -1,6 +1,6 @@
 <template>
     <section class="movie-search w-50 mx-auto mt-3">
-        <div class="alert alert-warning" role="alert" v-if="status">
+        <div class="alert alert-warning" role="alert" v-if="hasErrors && errors.length > 0">
             <ul>
                 <li v-for="(error, index) in errors" :key="index"> {{ error }} </li>
             </ul>
@@ -28,8 +28,7 @@ import LoadingComponent from '@/components/LoadingComponent.vue';
 export default class MovieSearch extends Vue {
 
     searchTerm = '';
-    searchStatus = false;
-    status = false;
+    hasErrors = false;
     awaitingResult = false;
     errors: string[] = [];
     
@@ -39,36 +38,36 @@ export default class MovieSearch extends Vue {
 
     search(): void { 
         this.errors = [];
-        this.status = false;
+        this.hasErrors = false;
 
         if(this.searchTerm == ''){
-            this.status = true;
+            this.hasErrors = true;
             this.errors.push("Search Term cannot be empty");
         }
 
-        if(this.status) return;
+        if(this.hasErrors) return;
 
         this.awaitingResult = true;
         this.$store.dispatch('search', this.searchTerm)
         .then((response) => {            
             if(response.data.results == 0){
-                this.status = true;
+                this.hasErrors = true;
                 this.errors.push("No Movie found with search term: " + this.searchTerm);
 
                 setTimeout(() => {
-                   this.status = false;
+                   this.hasErrors = false;
                    this.awaitingResult = false;
                    this.errors = [];
                 },2000)
             }
 
-            if(response.data.results.length > 0){
-                // this.movies = response.data.results;                
+            if(response.data.results.length > 0){            
                 this.$store.dispatch('guessMode', 'PLAY');
             }
         })
         .catch(err => {
-            this.status = false;
+            this.hasErrors = true;
+            this.awaitingResult = false;
             this.errors.push("Sorry can't process this action ");
         })
     }

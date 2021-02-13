@@ -68,8 +68,8 @@ describe('Visit Register Page', () => {
 
     cy.get('input[name="password"]').type("123456").should("have.value", "123456");
     cy.get('input[name="password-confirm"]').type("123456").should("have.value", "123456");
-    cy.get('input[name="username"]').type("4username").should("have.value", "4username");
-    cy.get('input[name="email"]').type("4tester.account@gmail.com").should("have.value", "4tester.account@gmail.com");
+    cy.get('input[name="username"]').type("username").should("have.value", "username");
+    cy.get('input[name="email"]').type("tester.account@gmail.com").should("have.value", "tester.account@gmail.com");
 
 
     cy.get("form").submit();
