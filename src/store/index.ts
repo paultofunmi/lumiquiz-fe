@@ -34,7 +34,7 @@ export default new Vuex.Store({
       state.movies = JSON.stringify(results.movies);
       localStorage.setItem('guessMode', 'PLAY')
       localStorage.setItem('movies', JSON.stringify(results.movies));
-      localStorage.setItem('term_id', JSON.stringify(results.term));
+      localStorage.setItem('term_id', results.term);
     },
     scoreQuiz(state, response) {
       state.guessMode = 'RESULT';
@@ -140,6 +140,7 @@ export default new Vuex.Store({
       })
     },
     scoreQuiz({ commit }, scores) {
+      
       const data = {
         ...scores,
         'term_id': this.state.term
@@ -152,8 +153,8 @@ export default new Vuex.Store({
             commit('scoreQuiz', response.data);
             resolve(response)
         })
-        .catch(err => {
-          reject(err)
+        .catch(error => {
+          reject(error.response)
         })
       }) 
     },
@@ -177,6 +178,7 @@ export default new Vuex.Store({
         localStorage.removeItem('total')
         localStorage.removeItem('percentage')
         localStorage.removeItem('movies')
+        localStorage.removeItem('term_id')
     }
   },
   getters: {

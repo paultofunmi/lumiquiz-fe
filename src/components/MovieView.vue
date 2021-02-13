@@ -12,20 +12,23 @@
             <p class="current-movie__movie-plot">
                 {{ moviesTermData[currentIndex].plot }}
             </p>
-            <form action="" method="post">
+            <form action="" method="post" @submit.prevent="submitScore">
                 <input type="text" placeholder="Guess the IMDB score" v-model="guess" class="form-control" required>
-                <input type="submit" value="Submit" class="btn btn-primary mt-3" @click.prevent="submitScore">
+                <button type="submit" class="btn btn-primary mt-3" v-if="!awaitingResult"> Submit Score </button>
+
+                <button type="submit" class="btn btn-primary mt-3" v-if="awaitingResult"> <loading-component width="35"></loading-component> </button>
             </form>
         </div>
     </section>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue} from 'vue-property-decorator';
+import LoadingComponent from '@/components/LoadingComponent.vue'; 
 
 @Component({
   components: {
-    
+      LoadingComponent
   },
 })
 export default class MovieView extends Vue{
@@ -33,6 +36,7 @@ export default class MovieView extends Vue{
 guess = '';
     currentIndex = 0;
     scores: any[] = [];
+    awaitingResult = false;
 
     get moviesTermData() {
         return JSON.parse(this.$store.getters.movies)
@@ -56,10 +60,17 @@ guess = '';
             ++this.currentIndex;
         }
         else {
+            this.awaitingResult = true;
             const actionPayload = {
                 submissions: this.scores,
             }
             this.$store.dispatch('scoreQuiz', actionPayload)
+            .then((response) => {
+                this.awaitingResult = false;    
+            }).catch(err => {
+                console.log(err);
+               this.awaitingResult = false;     
+            })
         }
         
     }
