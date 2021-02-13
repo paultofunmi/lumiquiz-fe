@@ -14,7 +14,7 @@
                             <li v-for="(error, index) in errors" :key="index"> {{ error }} </li>
                         </ul>
 
-                        <ul v-if="authError">                    
+                        <ul v-if="authError.length > 0">                    
                             <li v-for="(error, index) in authError" :key="index"> {{ error }} </li>
                         </ul>                
                     </div>
