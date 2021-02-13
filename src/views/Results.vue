@@ -41,16 +41,17 @@ export default class Results extends Vue {
 
     
     
-    created(): void {
+    mounted(): void {
 
         this.$store.dispatch('fetchResults')
         .then((response) => {
-            this.results = response.data;
-
+            
             response.data.slice(0,10).forEach( (d: any) => {
                 this.labels.push( Vue.lodash.capitalize(d.name) + ' - ' + Vue.lodash.capitalize(d.term))
                 this.scores.push(d.score)
             });
+
+            this.results = response.data;
         })
     }
 

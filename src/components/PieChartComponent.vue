@@ -50,19 +50,21 @@
           legend: {
             display: true
           },
-          // responsive: true,
+          responsive: true,
           maintainAspectRatio: false
         }
       }
     },
-    mounted () {
-      this.renderChart(this.chartData, this.options)
+    watch: {
+      labels: function() {
+        this.renderChart(this.chartData, this.options)
+      }
     }
   }
 </script>
 
 <style>
     #pie-chart {
-      box-sizing: border-box;
+        box-sizing: border-box;
     }
 </style>

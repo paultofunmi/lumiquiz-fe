@@ -10,7 +10,7 @@ export default new Vuex.Store({
     guessMode: localStorage.getItem('guessMode'),
     token: localStorage.getItem('token') || '',
     movies: localStorage.getItem('movies'),
-    term: localStorage.getItem('term_id'),
+    term: localStorage.getItem('term'),
     score: localStorage.getItem('score'),
     total: localStorage.getItem('total'),
     percentage: localStorage.getItem('percentage'),
@@ -32,9 +32,10 @@ export default new Vuex.Store({
     },
     searchResults(state, results) {
       state.movies = JSON.stringify(results.movies);
+      state.term = results.term;
       localStorage.setItem('guessMode', 'PLAY')
       localStorage.setItem('movies', JSON.stringify(results.movies));
-      localStorage.setItem('term_id', results.term);
+      localStorage.setItem('term', results.term);
     },
     scoreQuiz(state, response) {
       state.guessMode = 'RESULT';
@@ -108,10 +109,12 @@ export default new Vuex.Store({
     },
 
     search({ commit }, term) {
+      
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.state.token
+
       return new Promise((resolve, reject) => {
         const url = 'http://0.0.0.0:9191/api/quiz/search?term=' + term
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.state.token
-
+        
         axios({url: url, method: 'GET' })
           .then(response => {
           
@@ -120,6 +123,7 @@ export default new Vuex.Store({
                 movies: response.data.results,
                 term: response.data.term_id
               }
+
               commit('searchResults', movieTermData)
             }
             resolve(response)
@@ -140,11 +144,8 @@ export default new Vuex.Store({
       })
     },
     scoreQuiz({ commit }, data) {
-      
-      // const data = {
-      //   ...scores,
-      //   'term_id': this.state.term
-      // }
+
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.state.token
       
       return new Promise((resolve, reject) => {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.state.token
@@ -160,8 +161,9 @@ export default new Vuex.Store({
     },
     fetchResults({ commit }) {
        
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.state.token
+
        return new Promise((resolve, reject) => {
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.state.token
         axios({url: 'http://0.0.0.0:9191/api/quiz/results', method: 'GET' })
           .then(response => {
             resolve(response)
@@ -178,7 +180,7 @@ export default new Vuex.Store({
         localStorage.removeItem('total')
         localStorage.removeItem('percentage')
         localStorage.removeItem('movies')
-        localStorage.removeItem('term_id')
+        localStorage.removeItem('term')
     }
   },
   getters: {

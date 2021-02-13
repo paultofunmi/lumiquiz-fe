@@ -76,8 +76,7 @@ guess = '';
             }).catch(() => {
                this.awaitingResult = false;     
             })
-        }
-        
+        }   
     }
 }
 </script>
